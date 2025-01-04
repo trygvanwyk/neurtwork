@@ -2,6 +2,6 @@ x = "Hello world!"
 
 y = "Neurtwork"
 
-x.replace("world", y)
+z = x.replace("world", y)
 
-print(x)
+print(z)
