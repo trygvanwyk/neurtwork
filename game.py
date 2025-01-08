@@ -1,6 +1,42 @@
 import tkinter as tk
 from PIL import Image, ImageTk
 
+# make the main window, name it, and give it dimensions
+root = tk.Tk()
+root.title("Chess")
+root.geometry('820x820')
+
+game_board = tk.Frame(root, borderwidth=5, relief="solid")
+game_board.grid(padx=5, pady=5)
+game_board.config(width=800, height=800)
+
+class BoardSquare:
+    def __init__(self, row, column, color):
+        self.row = row
+        self.column = column
+        self.color = color
+
+        self.frame = tk.Frame(game_board, background=f"{color}")
+        self.frame.grid(row=row, column=column)
+        self.frame.config(height=100, width=100)
+
+# create board where each square is a frame (frames can contain more widgets)
+def construct_board1():
+    # create gray squares
+    for x in range(0, 8, 2):
+        for i in range(0, 8, 2):
+            BoardSquare(x, i, "grey75")
+    for x in range(1, 8, 2):
+        for i in range(1, 8, 2):
+            BoardSquare(x, i, "grey75")
+    # create green squares
+    for x in range(0, 8, 2):
+        for i in range(1, 8, 2):
+            BoardSquare(x, i, "green4")
+    for x in range(1, 8, 2):
+        for i in range(0, 8, 2):
+            BoardSquare(x, i, "green4")
+
 def construct_board(dimension, grid_size):
     d = float(dimension)
     gap = d / grid_size
@@ -28,30 +64,27 @@ class Piece:
         self.photo = ImageTk.PhotoImage(self.image)
 
         #create a label to display the piece
-        self.photolabel = tk.Button(root, image=self.photo)
+        self.photolabel = tk.Button(master, image=self.photo)
         self.photolabel.grid(row=row, column=column)
 
-# make the main window, name it, and give it dimensions
-root = tk.Tk()
-root.title("Chess")
-root.geometry('1000x1000')
+construct_board1()
 
 # execute function in the Piece class to create new piece and store it as variable
-bk = Piece(root, "bk", 1, 0)
-bq = Piece(root, "bq", 1, 1)
-br = Piece(root, "br", 1, 2)
-bb = Piece(root, "bb", 1, 3)
-bkn = Piece(root, "bkn", 1, 4)
-bp = Piece(root, "bp", 1, 5)
+bk = Piece(game_board, "bk", 0, 4)
+bq = Piece(game_board, "bq", 0, 3)
+br = Piece(game_board, "br", 0, 0)
+bb = Piece(game_board, "bb", 0, 2)
+bkn = Piece(game_board, "bkn", 0, 1)
+bp = Piece(game_board, "bp", 1, 0)
 
-wk = Piece(root, "wk", 0, 0)
-wq = Piece(root, "wq", 0, 1)
-wr = Piece(root, "wr", 0, 2)
-wb = Piece(root, "wb", 0, 3)
-wkn = Piece(root, "wkn", 0, 4)
-wp = Piece(root, "wp", 0, 5)
+wk = Piece(game_board, "wk", 7, 4)
+wq = Piece(game_board, "wq", 7, 3)
+wr = Piece(game_board, "wr", 7, 0)
+wb = Piece(game_board, "wb", 7, 2)
+wkn = Piece(game_board, "wkn", 7, 1)
+wp = Piece(game_board, "wp", 6, 0)
 
 # construct the main parts of the board
-construct_board('500', 8)
+#construct_board('500', 8)
 
 root.mainloop()
