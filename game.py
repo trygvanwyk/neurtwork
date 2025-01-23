@@ -53,19 +53,55 @@ def construct_board(dimension, grid_size):
             if r % 2 == 0 and c % 2 != 0:
                 canvas.create_rectangle(r * gap, c * gap, (r + 1) * gap, (c + 1) * gap, fill='green4')
 
-class Piece:
-    def __init__(self, master, name, row, column):
-        #define where piece will exist
-        self.master = master
+pawns = ["wp", "wp1", "wp2", "wp3", "wp4", "wp5", "wp6", "wp7",
+         "bp", "bp1", "bp2", "bp3", "bp4", "bp5", "bp6", "bp7"]
+rooks = ["wr", "wr1", "br", "br1"]
+knights = ["wkn", "wkn1", "bkn", "bkn2"]
+queens = ["wq", "bq"]
+kings = ["wk", "bk"]
+bishops = ["wb", "wb1", "bb", "bb1"]
 
-        #call image from name of piece
+#placeholder functions when piece is pressed
+def get_valid_rook_moves():
+    print("Rook")
+def get_valid_queen_moves():
+    print("Queen")
+def get_valid_king_moves():
+    print("King")
+def get_valid_bishop_moves():
+    print("Bishop")
+def get_valid_knight_moves():
+    print("Knight")
+def get_valid_pawn_moves():
+    print("Pawn")
+
+class Piece:
+    #call image from name of piece, create button for piece
+    def __init__(self, master, name, row, col):
         self.name = name
         self.image = Image.open(f"pieceimages/{name}.png")
         self.photo = ImageTk.PhotoImage(self.image)
+        self.master = master
+        self.photolabel = tk.Button(master, image=self.photo, command=lambda: self.get_valid_moves(name))
+        self.row = row
+        self.col = col
+        self.photolabel.grid(row=row, column=col)
 
-        #create a label to display the piece
-        self.photolabel = tk.Button(master, image=self.photo)
-        self.photolabel.grid(row=row, column=column)
+    #when piece is clicked, refer it to function with custom moves
+    def get_valid_moves(self, name):
+        self.name = name
+        if name in queens:
+            get_valid_queen_moves()
+        elif name in rooks:
+            get_valid_rook_moves()
+        elif name in kings:
+            get_valid_king_moves()
+        elif name in bishops:
+            get_valid_bishop_moves()
+        elif name in knights:
+            get_valid_knight_moves()
+        elif name in pawns:
+            get_valid_pawn_moves()
 
 construct_board1()
 
