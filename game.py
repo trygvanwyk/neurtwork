@@ -104,7 +104,6 @@ wp5 = Piece(game_board, "wp", 6, 5)
 wp6 = Piece(game_board, "wp", 6, 6)
 wp7 = Piece(game_board, "wp", 6, 7)
 
-
 # construct the main parts of the board
 #construct_board('500', 8)
 
