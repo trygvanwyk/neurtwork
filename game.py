@@ -1,5 +1,6 @@
 import tkinter as tk
 from PIL import Image, ImageTk
+import numpy as np
 
 # make the main window, name it, and give it dimensions
 root = tk.Tk()
@@ -15,6 +16,7 @@ class BoardSquare:
         self.row = row
         self.column = column
         self.color = color
+        self.location = (self.row, self.column)
 
         self.frame = tk.Frame(game_board, background=f"{color}")
         self.frame.grid(row=row, column=column)
@@ -63,17 +65,44 @@ bishops = ["wb", "wb1", "bb", "bb1"]
 
 #placeholder functions when piece is pressed
 def get_valid_rook_moves():
-    print("Rook")
+    pass
 def get_valid_queen_moves():
-    print("Queen")
+    pass
 def get_valid_king_moves():
-    print("King")
+    pass
 def get_valid_bishop_moves():
-    print("Bishop")
+    pass
 def get_valid_knight_moves():
-    print("Knight")
-def get_valid_pawn_moves():
-    print("Pawn")
+    pass
+def get_valid_pawn_moves(board, pawn_pos, color):
+    """
+    Returns a list of valid moves for the pawn at 'pawn_pos' on 'board'.
+    """
+    moves = []
+
+    # Define the direction of movement based on the pawn's color
+    direction = 1 if color == 'white' else -1
+
+    # Check if the pawn can move one square forward
+    target_pos = (pawn_pos[0], pawn_pos[1] + direction)
+    if board.is_empty_square(target_pos):
+        moves.append(target_pos)
+
+        # Check if the pawn can move two squares forward
+        if pawn_pos[1] == 1 if color == 'white' else 6:
+            target_pos = (pawn_pos[0], pawn_pos[1] + 2 * direction)
+            if board.is_empty_square(target_pos):
+                moves.append(target_pos)
+
+    # Check if the pawn can capture diagonally
+    for x_offset in [-1, 1]:
+        target_pos = (pawn_pos[0] + x_offset, pawn_pos[1] + direction)
+        if board.is_valid_square(target_pos) and board.is_opponent_piece(target_pos, color):
+            moves.append(target_pos)
+
+    # Add en passant logic here (if applicable)
+
+    return moves
 
 class Piece:
     #call image from name of piece, create button for piece
@@ -82,13 +111,20 @@ class Piece:
         self.image = Image.open(f"pieceimages/{name}.png")
         self.photo = ImageTk.PhotoImage(self.image)
         self.master = master
-        self.photolabel = tk.Button(master, image=self.photo, command=lambda: self.get_valid_moves(name))
+        self.photolabel = tk.Button(master, image=self.photo, command=lambda: [self.get_loc(), self.get_valid_moves(name)])
         self.row = row
         self.col = col
         self.photolabel.grid(row=row, column=col)
 
+    def get_loc(self):
+        loc = (self.row, self.col)
+        print(loc)
+        self.photolabel.config(highlightbackground="red", highlightthickness=5)
+         
+
     #when piece is clicked, refer it to function with custom moves
     def get_valid_moves(self, name):
+        loc = (self.row, self.col)
         self.name = name
         if name in queens:
             get_valid_queen_moves()
@@ -101,7 +137,7 @@ class Piece:
         elif name in knights:
             get_valid_knight_moves()
         elif name in pawns:
-            get_valid_pawn_moves()
+            get_valid_pawn_moves(BoardSquare, loc, "white")
 
 construct_board1()
 
